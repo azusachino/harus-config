@@ -1,0 +1,138 @@
+server:
+  # ip in tailscale
+  host: 100.110.211.97
+  port: 12345
+
+theme:
+  light: true
+  background-color: 220 23 95
+  contrast-multiplier: 1.0
+  primary-color: 220 91 54
+  positive-color: 109 58 40
+  negative-color: 347 87 44
+
+pages:
+  - name: Home
+    # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
+    # hide-desktop-navigation: true
+    columns:
+      - size: small
+        widgets:
+          - type: calendar
+            first-day-of-week: monday
+
+          - type: rss
+            limit: 10
+            collapse-after: 3
+            cache: 12h
+            feeds:
+              - url: https://selfh.st/rss/
+                title: selfh.st
+                limit: 2
+              - url: https://www.joshwcomeau.com/rss.xml
+                title: Josh Comeau
+              - url: https://samwho.dev/rss.xml
+              - url: https://ishadeed.com/feed.xml
+                title: Ahmad Shadeed
+              - url: https://ciechanow.ski/atom.xml
+                title: Bartosz Ciechanowski
+
+          - type: twitch-channels
+            channels:
+              - theprimeagen
+              - j_blow
+              - piratesoftware
+              - cohhcarnage
+              - christitustech
+              - EJ_SA
+
+      - size: full
+        widgets:
+          - type: group
+            widgets:
+              - type: hacker-news
+              - type: lobsters
+
+          - type: videos
+            channels:
+              - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
+              - UCR-DXc1voovS8nhAvccRZhg # Jeff Geerling
+              - UCsBjURrPoezykLs9EqgamOA # Fireship
+              - UCBJycsmduvYEL83R_U4JriQ # Marques Brownlee
+              - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
+              - UCRIgIJQWuBJ0Cv_VlU3USNA # yorushika
+              - UCilwQlk62k1z7aUEZPOB6yw # 小玲说
+              - UCsXVk37bltHxD1rDPwtNM8Q # kurzgesagt
+              - UCeUJO1H3TEXu2syfAAPjYKQ # GeekWan
+              - UC2cRwTuSWxxEtrRnT4lrlQA # media storm
+              - UCHnyfMqiRRG1u-2MsSQLbXA # veritasium
+              - UCTpUhRp0z_15U6PWg7_27kg # cyz
+              - UCYbH8CWlZkNgoE8EY0SoE3g # 硬件杂谈
+              - UCtwSCTpftyPm4-TBf9S6kfQ # r906
+
+          - type: group
+            widgets:
+              # - type: reddit
+              #  subreddit: technology
+              #  show-thumbnails: true
+               - type: repository
+                 repository: aeron-io/aeron
+                 pull-requests-limit: 5
+                 issues-limit: 3
+                 commits-limit: 3
+               - type: repository
+                 repository: tokio-rs/tokio
+                 pull-requests-limit: 5
+                 issues-limit: 3
+                 commits-limit: 3
+
+      - size: small
+        widgets:
+          - type: weather
+            location: Tokyo, Japan
+            units: metric # alternatively "imperial"
+            hour-format: 24h # alternatively "24h"
+            # Optionally hide the location from being displayed in the widget
+            # hide-location: true
+
+          - type: markets
+            # The link to go to when clicking on the symbol in the UI,
+            # {SYMBOL} will be substituded with the symbol for each market
+            symbol-link-template: https://www.tradingview.com/symbols/{SYMBOL}/news
+            markets:
+              - symbol: SPY
+                name: S&P 500
+              - symbol: BTC-USD
+                name: Bitcoin
+              - symbol: NVDA
+                name: NVIDIA
+              - symbol: AAPL
+                name: Apple
+              - symbol: MSFT
+                name: Microsoft
+
+          - type: releases
+            cache: 1d
+            # Without authentication the Github API allows for up to 60 requests per hour. You can create a
+            # read-only token from your Github account settings and use it here to increase the limit.
+            # token: ...
+            repositories:
+              - glanceapp/glance
+              - go-gitea/gitea
+              - immich-app/immich
+              - syncthing/syncthing
+
+  # Add more pages here:
+  # - name: Your page name
+  #   columns:
+  #     - size: small
+  #       widgets:
+  #         # Add widgets here
+
+  #     - size: full
+  #       widgets:
+  #         # Add widgets here
+
+  #     - size: small
+  #       widgets:
+  #         # Add widgets here

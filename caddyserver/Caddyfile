@@ -1,0 +1,5 @@
+azusachino.icu {
+        tls azusachino@duck.com
+        root * /harus/data/website
+        file_server
+}
