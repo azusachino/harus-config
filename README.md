@@ -6,6 +6,7 @@ harus-config which might be used on VPS.
 
 - caddy server
 - glance
+- fish
 
 ## references
 
