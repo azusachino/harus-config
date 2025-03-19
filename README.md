@@ -1,6 +1,6 @@
 # harus-config
 
-harus-config which might be used on VPS.
+harus-config with various configuration files.
 
 ## services
 
@@ -8,6 +8,14 @@ harus-config which might be used on VPS.
 - glance
 - fish
 
+## quick access
+
+```bash
+curl -o ~/.tmux.conf https://raw.githubusercontent.com/azusachino/harus-config/main/tmux.conf
+
+curl -o ~/.config/fish/config.fish https://raw.githubusercontent.com/azusachino/harus-config/main/config.fish
+```
+
 ## references
 
-- https://github.com/glanceapp/glance/blob/main/docs/configuration.md#repository
+- https://github.com/glanceapp/glance/blob/main/docs/configuration.md

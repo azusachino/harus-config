@@ -4,7 +4,7 @@ tasks:
   glance:
     prompt: This is a dangerous command... Do you want to continue?
     cmds:
-      - cp -f glance/glance.yaml /workspace/glance/glance.yaml
+      - cp -f glance.yaml /workspace/glance/glance.yaml
   fish:
     prompt: This is a dangerous command... Do you want to continue?
     cmds:

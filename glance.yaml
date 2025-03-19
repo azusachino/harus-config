@@ -1,6 +1,4 @@
 server:
-  # ip in tailscale
-  host: 100.110.211.97
   port: 12345
 
 theme:
@@ -20,7 +18,6 @@ pages:
         widgets:
           - type: calendar
             first-day-of-week: monday
-
           - type: rss
             limit: 10
             collapse-after: 3
@@ -61,13 +58,13 @@ pages:
               - UCBJycsmduvYEL83R_U4JriQ # Marques Brownlee
               - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
               - UCRIgIJQWuBJ0Cv_VlU3USNA # yorushika
-              - UCilwQlk62k1z7aUEZPOB6yw # 小玲说
+              - UCilwQlk62k1z7aUEZPOB6yw # lin talk on financial
               - UCsXVk37bltHxD1rDPwtNM8Q # kurzgesagt
               - UCeUJO1H3TEXu2syfAAPjYKQ # GeekWan
               - UC2cRwTuSWxxEtrRnT4lrlQA # media storm
               - UCHnyfMqiRRG1u-2MsSQLbXA # veritasium
               - UCTpUhRp0z_15U6PWg7_27kg # cyz
-              - UCYbH8CWlZkNgoE8EY0SoE3g # 硬件杂谈
+              - UCYbH8CWlZkNgoE8EY0SoE3g # hardware talks
               - UCtwSCTpftyPm4-TBf9S6kfQ # r906
 
           - type: group
