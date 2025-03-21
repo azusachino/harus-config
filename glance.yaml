@@ -1,5 +1,5 @@
 server:
-  port: 12345
+  port: 5001
 
 theme:
   light: true
@@ -10,6 +10,95 @@ theme:
   negative-color: 347 87 44
 
 pages:
+  - name: Dashboard
+    columns:
+      - size: small
+        widgets:
+          - type: server-stats
+            servers:
+              - type: local
+                name: Services
+          - type: dns-stats
+            service: pihole-v6
+            url: https://harus-pi.talpidae-beta.ts.net:1443
+            password: ${PIHOLE_PASSWORD}
+          - type: custom-api
+            title: Immich stats
+            cache: 1d
+            url: https://harus-mini.talpidae-beta.ts.net:8444/api/server/statistics
+            headers:
+              x-api-key: ${IMMICH_API_KEY}
+              Accept: application/json
+            template: |
+              <div class="flex justify-between text-center">
+                <div>
+                    <div class="color-highlight size-h3">{{ .JSON.Int "photos" | formatNumber }}</div>
+                    <div class="size-h6">PHOTOS</div>
+                </div>
+                <div>
+                    <div class="color-highlight size-h3">{{ .JSON.Int "videos" | formatNumber }}</div>
+                    <div class="size-h6">VIDEOS</div>
+                </div>
+                <div>
+                    <div class="color-highlight size-h3">{{ div (.JSON.Int "usage" | toFloat) 1073741824 | toInt | formatNumber }}GB</div>
+                    <div class="size-h6">USAGE</div>
+                </div>
+              </div>
+
+          - type: custom-api
+            title: Random Fact
+            cache: 6h
+            url: https://uselessfacts.jsph.pl/api/v2/facts/random
+            template: |
+              <p class="size-h4 color-paragraph">{{ .JSON.String "text" }}</p>
+
+      - size: full
+        widgets:
+          - type: search
+            search-engine: duckduckgo
+            bangs:
+              - title: YouTube
+                shortcut: "!yt"
+                url: https://www.youtube.com/results?search_query={QUERY}
+          - type: split-column
+            widgets:
+              - type: docker-containers
+                hide-by-default: false
+              - type: monitor
+                cache: 1m
+                title: Services
+                sites:
+                  - title: Immich
+                    url: https://harus-mini.talpidae-beta.ts.net:8444
+                    icon: si:immich
+                  - title: Vaultwarden
+                    url: https://harus-pi.talpidae-beta.ts.net:8443
+                    icon: si:bitwarden
+                  - title: Pihole
+                    url: https://harus-pi.talpidae-beta.ts.net:1443/admin
+                    icon: si:pihole
+                    alt-status-codes:
+                      - 200
+                      - 401
+                      - 403
+          - type: custom-api
+            title: Steam Specials
+            cache: 12h
+            url: https://store.steampowered.com/api/featuredcategories?cc=jp
+            template: |
+              <ul class="list list-gap-10 collapsible-container" data-collapse-after="5">
+              {{ range .JSON.Array "specials.items" }}
+                <li>
+                  <a class="size-h4 color-highlight block text-truncate" href="https://store.steampowered.com/app/{{ .Int "id" }}/">{{ .String "name" }}</a>
+                  <ul class="list-horizontal-text">
+                    <li>{{ div (.Int "final_price" | toFloat) 100 | printf "%.2f円" }}</li>
+                    {{ $discount := .Int "discount_percent" }}
+                    <li{{ if ge $discount 40 }} class="color-positive"{{ end }}>{{ $discount }}% off</li>
+                  </ul>
+                </li>
+              {{ end }}
+              </ul>
+
   - name: Home
     # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
     # hide-desktop-navigation: true
@@ -62,7 +151,6 @@ pages:
               - UCsXVk37bltHxD1rDPwtNM8Q # kurzgesagt
               - UCeUJO1H3TEXu2syfAAPjYKQ # GeekWan
               - UC2cRwTuSWxxEtrRnT4lrlQA # media storm
-              - UCHnyfMqiRRG1u-2MsSQLbXA # veritasium
               - UCTpUhRp0z_15U6PWg7_27kg # cyz
               - UCYbH8CWlZkNgoE8EY0SoE3g # hardware talks
               - UCtwSCTpftyPm4-TBf9S6kfQ # r906
@@ -72,16 +160,16 @@ pages:
               # - type: reddit
               #  subreddit: technology
               #  show-thumbnails: true
-               - type: repository
-                 repository: aeron-io/aeron
-                 pull-requests-limit: 5
-                 issues-limit: 3
-                 commits-limit: 3
-               - type: repository
-                 repository: tokio-rs/tokio
-                 pull-requests-limit: 5
-                 issues-limit: 3
-                 commits-limit: 3
+              - type: repository
+                repository: aeron-io/aeron
+                pull-requests-limit: 5
+                issues-limit: 3
+                commits-limit: 3
+              - type: repository
+                repository: tokio-rs/tokio
+                pull-requests-limit: 5
+                issues-limit: 3
+                commits-limit: 3
 
       - size: small
         widgets:
@@ -110,26 +198,8 @@ pages:
 
           - type: releases
             cache: 1d
-            # Without authentication the Github API allows for up to 60 requests per hour. You can create a
-            # read-only token from your Github account settings and use it here to increase the limit.
-            # token: ...
             repositories:
               - glanceapp/glance
               - go-gitea/gitea
               - immich-app/immich
               - syncthing/syncthing
-
-  # Add more pages here:
-  # - name: Your page name
-  #   columns:
-  #     - size: small
-  #       widgets:
-  #         # Add widgets here
-
-  #     - size: full
-  #       widgets:
-  #         # Add widgets here
-
-  #     - size: small
-  #       widgets:
-  #         # Add widgets here
