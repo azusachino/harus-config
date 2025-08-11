@@ -27,6 +27,8 @@ alias kl="kubectl logs -f --tail 200 "
 alias ss="ssh -o StrictHostKeyChecking=no "
 
 alias sk="sudo k3s kubectl "
+alias gco="git checkout"
+alias gfp="git fetch -v && git pull -v"
 
 ## functions
 #
