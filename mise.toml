@@ -1,0 +1,11 @@
+[settings]
+idiomatic_version_file_enable_tools = ["python", "java"]
+trusted_config_paths = ["~/Working", "~/Projects"]
+
+[tools]
+java = "zulu-17"
+bun = "latest"
+uv = "latest"
+rust = "stable"
+go = "1.25"
+node = "lts"
