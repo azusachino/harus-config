@@ -1,6 +1,7 @@
+# ~/.config/alacritty/alacritty.toml
+
 [general]
 live_config_reload = true
-#import = [ "~/.config/alacritty/catppuccin/catppuccin-mocha.toml" ]
 
 # check https://github.com/alacritty/alacritty-theme
 import = [

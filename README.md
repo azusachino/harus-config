@@ -7,6 +7,8 @@ harus-config with various configuration files.
 - caddy server
 - glance
 - fish
+- starship
+- alacritty
 
 ## quick access
 
