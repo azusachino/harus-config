@@ -1,0 +1,9 @@
+[install]
+# Only install package versions published at least 7 days ago (supply-chain
+# cooldown). Bun measures minimumReleaseAge in SECONDS — 7 days = 604800.
+# (npm's .npmrc min-release-age is in days; pnpm's is in minutes — units differ.)
+minimumReleaseAge = 604800
+
+# Trusted packages exempt from the cooldown — e.g. codex, run via `bunx
+# @openai/codex`, where we want the latest bugfixes immediately.
+minimumReleaseAgeExcludes = ["@openai/codex"]

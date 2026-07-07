@@ -1,32 +1,62 @@
 # harus-config
 
-harus-config with various configuration files.
+Reusable [Home Manager](https://nix-community.github.io/home-manager/) base
+modules — shell, editors, git, CLI toolbelt, and agent config — factored out of
+a personal Nix flake so any machine (or person) can build on top of them.
 
-## services
+This repo is a **module library**, not a runnable configuration. You consume it
+from your own flake, supply a `username`, and override identity as needed.
 
-- caddy server
-- glance
-- fish
-- starship
-- alacritty
+## Usage
 
-## quick access
+```nix
+# your-flake.nix
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    harus-config.url = "github:azusachino/harus-config";
+  };
 
-```bash
-curl -o ~/.tmux.conf https://raw.githubusercontent.com/azusachino/harus-config/main/tmux.conf
-
-curl -o ~/.config/fish/config.fish https://raw.githubusercontent.com/azusachino/harus-config/main/config.fish
+  outputs = {nixpkgs, home-manager, harus-config, ...}: {
+    homeConfigurations.me = home-manager.lib.homeManagerConfiguration {
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      extraSpecialArgs = {username = "you";};
+      modules = [
+        harus-config.homeManagerModules.default
+        harus-config.homeManagerModules.runtimes # optional: default language runtimes
+        {
+          harus.identity = {
+            name = "Your Name";
+            email = "you@example.com";
+          };
+          home.packages = [];
+        }
+      ];
+    };
+  };
+}
 ```
 
-## location
+See [`example/home.nix`](example/home.nix) for a sample machine module.
 
-fail2ban
+## What's exported
 
-```bash
-sudo cp /etc/fail2ban/fail2ban.conf /etc/fail2ban/fail2ban.local
-sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
-```
+| Output | Contents |
+| --- | --- |
+| `homeManagerModules.default` | Shell (bash/zsh/fish/starship), editors (neovim/helix), git + delta, gh, tmux, direnv, yazi, lazygit, mise, atuin, agent config (claude/gemini), plus the `harus.identity` option. Bundles `nix-index-database` and `sops-nix`. |
+| `homeManagerModules.runtimes` | Default language runtimes (jdk, go, node, bun, zig) — opt in per machine. |
 
-## references
+## Identity
 
-- https://github.com/glanceapp/glance/blob/main/docs/configuration.md
+All personal identity lives behind one option, `harus.identity`
+(`name` / `email` / `githubUser`), defaulting to the author's public GitHub
+identity. Override it per machine — nothing else carries hard-coded identity.
+
+## Requirements
+
+`extraSpecialArgs.username` must be set (the home directory and account name
+derive from it). Pin the exact revision via your `flake.lock`.
