@@ -23,7 +23,6 @@
     ./claude.nix
     ./gemini.nix
     ./neovim.nix
-    ./helix.nix
     ./sops.nix
     ./lazygit.nix
     ./yazi.nix

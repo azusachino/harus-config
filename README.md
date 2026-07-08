@@ -23,7 +23,7 @@ Factored out of a personal Nix setup so any machine, colleague, or friend can bu
 
 ## ✨ Features
 
-- **One import, a full environment** — shell (bash/zsh/fish + starship), editors (neovim/helix), git + delta, gh, tmux, direnv, yazi, lazygit, mise, atuin, and agent config.
+- **One import, a full environment** — shell (bash/zsh/fish + starship), editor (neovim), git + delta, gh, tmux, direnv, yazi, lazygit, mise, atuin, and agent config.
 - **Single identity seam** — `harus.identity` (`name` / `email` / `githubUser`). Override per machine; nothing else carries identity.
 - **Batteries bundled** — `nix-index-database` and `sops-nix` are wired in, so consumers don't need those inputs.
 - **Opt-in runtimes** — default language runtimes (jdk/go/node/bun/zig) are a separate module dev machines opt into.
@@ -42,7 +42,7 @@ Add it as an input and import the module:
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    harus-config.url = "github:azusachino/harus-config/v0.1.0"; # pin a tag
+    harus-config.url = "github:azusachino/harus-config/v0.1.1"; # pin a tag
   };
 
   outputs = {nixpkgs, home-manager, harus-config, ...}: {
@@ -77,8 +77,8 @@ See [`example/home.nix`](example/home.nix) for a sample machine module.
 
 | Output | Contents |
 | --- | --- |
-| `homeManagerModules.default` | Shell (bash/zsh/fish/starship), editors (neovim/helix), git + delta, gh, tmux, direnv, yazi, lazygit, mise, atuin, agent config (claude/gemini) + the `harus.identity` option. Bundles `nix-index-database` and `sops-nix`. |
-| `homeManagerModules.runtimes` | Default language runtimes (jdk, go, node, bun, zig) — opt in per machine. |
+| `homeManagerModules.default` | Shell (bash/zsh/fish/starship), editor (neovim), git + delta, gh, tmux, direnv, yazi, lazygit, mise, atuin, agent config (claude/gemini) + the `harus.identity` option. Bundles `nix-index-database` and `sops-nix`. |
+| `homeManagerModules.runtimes` | Default language runtimes (jdk, go, node, bun) — opt in per machine. |
 | `checks.<system>.exampleHome` | Builds a full home-manager generation from the base (what CI runs). |
 | `formatter.<system>` | `alejandra`, via `nix fmt`. |
 | `devShells.<system>.default` | `alejandra` + `nixd` + pre-commit hooks. |
@@ -104,7 +104,7 @@ by commit hash in your `flake.lock`, but tags give you a stable, human-readable
 reference:
 
 ```nix
-harus-config.url = "github:azusachino/harus-config/v0.1.0"; # pinned
+harus-config.url = "github:azusachino/harus-config/v0.1.1"; # pinned
 # or track the latest:
 harus-config.url = "github:azusachino/harus-config";        # main
 ```
