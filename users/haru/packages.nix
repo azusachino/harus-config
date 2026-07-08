@@ -55,11 +55,10 @@
       rclone
 
       # File Management & Media
-      ffmpeg
-      unar # archive extractor
+      ouch # modern unified compress/extract (Rust)
 
       # Shell & Navigation
-      zoxide
+      # zoxide — installed via programs.zoxide.enable in fish.nix (binary + shell integration)
       navi # interactive cheat sheet
 
       # Editors

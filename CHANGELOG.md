@@ -4,6 +4,18 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-07-08
+
+### Removed
+
+- Drop unused packages to slim the closure: `helix` (and its `helix.nix`
+  module), `zig`, `cargo-zigbuild`, and `ffmpeg`.
+
+### Changed
+
+- Replace `unar` with `ouch` for unified compress/extract.
+- Dedupe `zoxide` — it's already provided by `programs.zoxide.enable`.
+
 ## [0.1.0] - 2026-07-07
 
 Initial public release — the reusable Home Manager base.
@@ -19,4 +31,5 @@ Initial public release — the reusable Home Manager base.
 - OSS scaffolding: LICENSE (MIT), README, CONTRIBUTING, CODE_OF_CONDUCT,
   SECURITY, issue/PR templates, Makefile, GitHub Actions CI.
 
+[0.1.1]: https://github.com/azusachino/harus-config/releases/tag/v0.1.1
 [0.1.0]: https://github.com/azusachino/harus-config/releases/tag/v0.1.0

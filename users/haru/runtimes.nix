@@ -37,13 +37,9 @@
     # Rust (toolchain via rustup; the rest are cargo-ecosystem helpers)
     rustup # run `rustup default stable`
     cargo-update
-    cargo-zigbuild
     cargo-sweep
     cargo-cache
     sqlx-cli # async SQL toolkit / DB migrations (Rust)
-
-    # Zig
-    zig
   ];
 
   # nixpkgs JDKs do not export JAVA_HOME. `.home` is the platform-correct JDK
