@@ -45,10 +45,46 @@
     enableFishIntegration = true;
     enableZshIntegration = true;
   };
-  programs.fzf.enable = true;
   programs.nix-index.enable = true;
+
   programs.atuin = {
     enable = true;
     flags = ["--disable-up-arrow"]; # keep fish's default up-arrow, use ctrl+r for atuin
+    settings = {
+      # Enter places the highlighted command into the prompt for review instead
+      # of executing it immediately; press Enter again to run it. Tab does the
+      # same. Prevents accidental execution of the wrong history entry.
+      enter_accept = false;
+      inline_height = 20; # keep the search UI inline rather than clearing the screen
+      style = "compact";
+      show_preview = true; # full command preview for the highlighted entry
+      keymap_mode = "auto"; # pick vim/emacs keymap from the shell's current keymap
+    };
+  };
+
+  # fzf wired to fd (respects .gitignore but includes hidden files) with
+  # bat/eza previews for the Ctrl-T (files) and Alt-C (directories) widgets.
+  # fd/bat/eza all ship from packages.nix.
+  programs.fzf = {
+    enable = true;
+    defaultCommand = "fd --type f --hidden --exclude .git";
+    defaultOptions = [
+      "--height 40%"
+      "--border"
+      "--layout=reverse"
+    ];
+    fileWidgetCommand = "fd --type f --hidden --exclude .git";
+    fileWidgetOptions = ["--preview 'bat -n --color=always {}'"];
+    changeDirWidgetCommand = "fd --type d --hidden --exclude .git";
+    changeDirWidgetOptions = ["--preview 'eza --tree --color=always {} | head -100'"];
+  };
+
+  # bat defaults; also applies anywhere bat acts as a pager (e.g. fzf Ctrl-T preview).
+  programs.bat = {
+    enable = true;
+    config = {
+      theme = "TwoDark"; # built-in dark theme (no external theme file needed)
+      style = "changes,header";
+    };
   };
 }
