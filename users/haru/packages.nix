@@ -16,7 +16,7 @@
       miller # mlr: CSV/TSV/JSON data swiss army knife
       shfmt
       eza
-      bat
+      # bat — installed via programs.bat.enable in home.nix (binary + config)
       ripgrep
       fd
       sd # intuitive find & replace (modern sed)
@@ -28,6 +28,8 @@
       # Nix & System Tools
       nh # ergonomic nix/home-manager workflow helper
       nix-output-monitor # nom: colorful nix build progress
+      nix-tree # interactive closure explorer (why is this in the closure?)
+      comma # run any binary on demand via nix-index (`, <cmd>`)
       btop
       procs # modern ps: tree view, search, ports
       hyperfine # command-line benchmarking
@@ -36,9 +38,12 @@
       # Code stats & utilities (language-agnostic)
       tokei # count lines of code
       grex # generate regex
+      ast-grep # structural code search/rewrite by AST pattern
 
       # Development - Tools & Version Control
       git-lfs
+      difftastic # structural diff (difft); syntax-aware git diffs
+      git-cliff # changelog generator from conventional commits
       sops
       age
       watchexec
