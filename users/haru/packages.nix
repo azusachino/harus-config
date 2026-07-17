@@ -9,7 +9,6 @@
       curl
       xh # fast HTTP client (Rust httpie) for API testing/debug
       jq
-      glow
       dasel # query/convert JSON/YAML/TOML/XML/CSV in one tool
       duckdb
       postgresql # psql client + server tools

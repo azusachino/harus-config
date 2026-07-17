@@ -20,8 +20,6 @@
     ./tmux.nix
     ./direnv.nix
     ./gh.nix
-    ./claude.nix
-    ./gemini.nix
     ./neovim.nix
     ./sops.nix
     ./lazygit.nix
