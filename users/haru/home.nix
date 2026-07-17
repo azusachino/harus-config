@@ -15,15 +15,11 @@
     ./bash.nix
     ./zsh.nix
     ./fish.nix
-    ./starship.nix
     ./xdg.nix
-    ./tmux.nix
     ./direnv.nix
     ./gh.nix
     ./neovim.nix
     ./sops.nix
-    ./lazygit.nix
-    ./yazi.nix
   ];
 
   home.username = username;

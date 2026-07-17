@@ -16,10 +16,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Removed
 
 - Drop `glow` — package, its `xdg.configFile` entry, and config asset.
-- Move `claude.nix`, `gemini.nix` (agent statusline/hook scripts), and the
-  Ghostty terminal config out of the public base. They're personal/cosmetic
-  and tweaked often, so they now live in the private `harus-nix` consumer
-  instead of requiring a public release for every change.
+- Move `claude.nix`, `gemini.nix` (agent statusline/hook scripts), Ghostty
+  terminal config, `starship.nix`, `lazygit.nix`, `yazi.nix`, and `tmux.nix`
+  out of the public base. They're personal/cosmetic and tweaked often, so
+  they now live in the private `harus-nix` consumer (as dotfile-first
+  configs — real `.toml`/`.yml`/`.conf` files instead of Nix attrsets) instead
+  of requiring a public release for every change.
 
 ## [0.1.1] - 2026-07-08
 
