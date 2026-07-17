@@ -1,8 +1,0 @@
-# Global mise config — settings only.
-#
-# Language runtime *defaults* now come from nix (users/haru/runtimes.nix).
-# mise is for per-project version pinning: drop a .mise.toml in a repo to
-# override the nix default (e.g. java = "corretto-21", node = "20.11.1",
-# zig = "0.16"). rust is managed by rustup (not nix/mise).
-[settings]
-trusted_config_paths = ["~/Projects", "~/Working"]
