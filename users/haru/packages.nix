@@ -10,9 +10,7 @@
       xh # fast HTTP client (Rust httpie) for API testing/debug
       jq
       dasel # query/convert JSON/YAML/TOML/XML/CSV in one tool
-      duckdb
-      postgresql # psql client + server tools
-      miller # mlr: CSV/TSV/JSON data swiss army knife
+      duckdb # analytical SQL over CSV/JSON/Parquet, no server; `duckdb -c` is script/agent friendly
       shfmt
       eza
       # bat — installed via programs.bat.enable in home.nix (binary + config)
@@ -52,10 +50,6 @@
       # pre-commit — provided inside `nix develop` by the flake's pre-commit-hooks input
 
       # Infrastructure & Cloud
-      k9s
-      kubectl
-      # minikube — run on demand: `nix run nixpkgs#minikube -- start` (heavy, rarely used)
-      stern
       rclone
 
       # File Management & Media
