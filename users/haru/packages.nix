@@ -11,6 +11,7 @@
       jq
       dasel # query/convert JSON/YAML/TOML/XML/CSV in one tool
       duckdb # analytical SQL over CSV/JSON/Parquet, no server; `duckdb -c` is script/agent friendly
+      pgcli # interactive Postgres REPL — autocomplete, syntax highlight; no server
       shfmt
       eza
       # bat — installed via programs.bat.enable in home.nix (binary + config)

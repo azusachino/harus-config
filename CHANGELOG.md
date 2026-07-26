@@ -6,11 +6,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.2.2] - 2026-07-25
 
+### Changed
+
+- Replace `postgresql` (full server + client, 345 MB) with `pgcli` —
+  interactive-only, so scripts/agents should reach for `duckdb` instead;
+  `pgcli` stays for hands-on REPL use.
+
 ### Removed
 
-- Drop `postgresql` — no scriptable client-only build in nixpkgs (`pgcli`
-  has no query-and-exit flag, so it isn't a viable substitute for
-  script/agent use).
 - Drop `miller` — redundant with `duckdb` (reads CSV/JSON/Parquet
   directly) + `dasel`.
 - Drop `k9s`, `kubectl`, `stern` — cluster-only tools that shipped to
