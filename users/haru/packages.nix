@@ -11,7 +11,6 @@
       jq
       dasel # query/convert JSON/YAML/TOML/XML/CSV in one tool
       duckdb # analytical SQL over CSV/JSON/Parquet, no server; `duckdb -c` is script/agent friendly
-      pgcli # interactive Postgres REPL — autocomplete, syntax highlight; no server
       shfmt
       eza
       # bat — installed via programs.bat.enable in home.nix (binary + config)
@@ -40,7 +39,6 @@
 
       # Development - Tools & Version Control
       git-lfs
-      difftastic # structural diff (difft); syntax-aware git diffs
       git-cliff # changelog generator from conventional commits
       sops
       age

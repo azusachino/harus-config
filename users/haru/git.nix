@@ -36,12 +36,6 @@
       commit.verbose = true; # show the diff in the commit message editor
       column.ui = "auto"; # columnar output for branch/status listings
       help.autocorrect = "prompt"; # offer the intended command on a typo
-
-      # difftastic (difft) as an on-demand structural diff via `git dft`.
-      # delta stays the default pager for `git diff`/`git show`; this only
-      # affects `git difftool`.
-      difftool.difftastic.cmd = ''difft "$LOCAL" "$REMOTE"'';
-      difftool.prompt = false;
     };
 
     settings.alias = {
@@ -53,7 +47,6 @@
       lg = "log --oneline --graph --decorate -20";
       undo = "reset --soft HEAD~1";
       ac = ''!f() { git add -A && git commit "$@"; }; f''; # git ac -m "msg"
-      dft = "difftool --tool=difftastic"; # structural diff (difft)
     };
   };
 }
