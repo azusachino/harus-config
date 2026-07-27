@@ -4,6 +4,19 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2026-07-27
+
+### Removed
+
+- Drop `pgcli` — closure measured at 1.5 GiB (Python 3.14 +
+  `cryptography`/`paramiko`/`pynacl`/krb5/libpq-dev), 4x heavier than the
+  `postgresql` full server+client it replaced in `0.2.2`. No replacement;
+  reach for `duckdb`'s postgres scanner or an ad-hoc shell when a live
+  REPL is needed.
+- Drop `difftastic` (166 MiB closure) — rarely used. Also removes the
+  `git dft` alias and `difftool.difftastic` config from `git.nix`; `delta`
+  remains the default diff pager.
+
 ## [0.2.2] - 2026-07-25
 
 ### Changed
