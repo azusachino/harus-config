@@ -65,7 +65,6 @@ in {
       nil # Nix
       bash-language-server # Shell
       gopls # Go
-      rust-analyzer # Rust
       pyright # Python
       stylua # Lua formatter
       tree-sitter # Satisfy nvim-treesitter check
@@ -222,13 +221,6 @@ in {
             nil_ls = {},
             bashls = {},
             gopls = {},
-            rust_analyzer = {
-              -- Pin to the Nix binary. ~/.nix-profile/bin/rust-analyzer is the
-              -- rustup proxy, which recurses into itself ("infinite recursion
-              -- detected") when the rust-analyzer component is not installed in
-              -- the active toolchain.
-              cmd = { "${pkgs.rust-analyzer}/bin/rust-analyzer" },
-            },
             pyright = {},
           },
           -- LazyVim uses this setup function to override server configs.
