@@ -81,6 +81,23 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   configs — real `.toml`/`.yml`/`.conf` files instead of Nix attrsets) instead
   of requiring a public release for every change.
 
+## [0.2.0] - 2026-07-12
+
+### Added
+
+- `ast-grep`, `difftastic` — toolbelt-referenced code tools.
+- `nix-tree`, `comma` — Nix workflow tools (`comma` pairs with `programs.nix-index`).
+- `git-cliff` — changelog generation from conventional commits.
+
+### Changed
+
+- Promote config from the private `harus-nix` consumer into the shared base:
+  `atuin` settings, `fzf` fd-source + bat/eza previews, `bat` theme/style
+  (via `programs.bat.enable`), and low-risk `git` keys (`rerere`, histogram
+  diff, `commit.verbose`, `column.ui`, `help.autocorrect`).
+- Wire `difftastic` as the `git dft` difftool; `delta` remains the default
+  pager. (Backfilled: `0.2.0` was tagged without a changelog entry.)
+
 ## [0.1.1] - 2026-07-08
 
 ### Removed
