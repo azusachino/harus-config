@@ -19,7 +19,6 @@
     ./direnv.nix
     ./gh.nix
     ./neovim.nix
-    ./sops.nix
   ];
 
   home.username = username;
