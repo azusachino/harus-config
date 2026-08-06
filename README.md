@@ -104,7 +104,7 @@ by commit hash in your `flake.lock`, but tags give you a stable, human-readable
 reference:
 
 ```nix
-harus-config.url = "github:azusachino/harus-config/v0.2.5"; # pinned
+harus-config.url = "github:azusachino/harus-config/v0.2.6"; # pinned
 # or track the latest:
 harus-config.url = "github:azusachino/harus-config";        # main
 ```
