@@ -4,6 +4,34 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.5] - 2026-08-06
+
+### Changed
+
+- `neovim` is now a plain editor and nothing more: `enable`, `defaultEditor` and
+  the vi/vim/vimdiff aliases. The LazyVim setup moves to the private `harus-nix`
+  consumer as a dotfile-first config, following `starship`/`lazygit`/`yazi`/`tmux`
+  in `0.2.1`. An editor config is a dotfile you want to own directly, and while
+  it lived here every keymap change cost a commit, a release, a tag and an input
+  bump. Dev machines opt into the LazyVim config in `harus-nix`; lean machines
+  (`harus-pi`, `harus-wsl`) get just the plain editor.
+
+### Removed
+
+- Drop 417 lines of embedded lua, the Treesitter grammar wiring, the Nix-pinned
+  `lazy-nvim` plugin and the neovim language-server list (`lua-language-server`,
+  `nil`, `bash-language-server`, `gopls`, `pyright`, `stylua`, `tree-sitter`,
+  `gcc`). The server list moves with the config it serves rather than staying
+  behind — splitting a package list from the config that consumes it is the drift
+  this split is meant to avoid.
+
+## [0.2.4] - 2026-08-06
+
+### Removed
+
+- Drop `rust-analyzer` from the neovim LSP servers. (Backfilled: `0.2.4` was
+  tagged without a changelog entry.)
+
 ## [0.2.3] - 2026-07-27
 
 ### Removed
