@@ -58,8 +58,6 @@
       # Shell & Navigation
       # zoxide — installed via programs.zoxide.enable in fish.nix (binary + shell integration)
 
-      # Editors
-      # helix — configured via users/haru/helix.nix (programs.helix installs the package)
     ]
     ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
       # Container toolkit (Linux only — rootless, daemonless)
