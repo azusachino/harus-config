@@ -4,6 +4,50 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Removed
+
+- Drop `cargo-update`, `cargo-sweep`, `cargo-cache` and `sqlx-cli`. Every other
+  language's ecosystem tooling has one installer; a cargo binary had two, and
+  because `~/.nix-profile/bin` precedes `~/.cargo/bin` on `PATH` the nix copy
+  won silently — `cargo-update` was answering 20.0.0 over an installed 22.1.1,
+  `sqlx-cli` 0.8.6 over 0.9.0. Neither failed loudly; they just ran an older
+  tool than the one that was installed. The split is now `rustup` for the
+  toolchain, `cargo install` for cargo binaries, `cargo install-update -a` to
+  keep them current.
+
+  `rustup` itself **stays**. It is the bootstrap for a fresh machine, and unlike
+  the cargo binaries there is nothing to shadow: nix's rustup and a self-managed
+  one are the same version and share `~/.rustup/toolchains`, making nix's a
+  front-end rather than a rival. Self-update being disabled in the nix build is
+  correct here — `flake.lock` is the updater.
+
+- Drop `golangci-lint`. Every Go repo pins its own — `iroha/.mise.toml` has
+  `aqua:golangci/golangci-lint = "2.13.1"` and `felicia`'s Makefile documents
+  it as coming from mise. Since mise's shims prepend to `PATH` inside a pinned
+  project, the nix copy never won where it was used and was dead weight
+  everywhere else.
+
+- Drop `yamlfmt` and `navi`. Zero invocations across six months of shell
+  history and 27.5k agent commands, and neither is referenced by a build target.
+
+- Drop `markdownlint-cli2`. `harus-k3s` calls it behind a `command -v` guard,
+  so its `make check` now warns and skips instead of linting markdown — accepted
+  deliberately rather than by accident.
+
+### Added
+
+- `difftastic` (`difft`) and `typos`. The `toolbelt` skill has documented both
+  with concrete recipes since it was "reconciled with the actual harus-config
+  nix tool set", but `difftastic` was dropped from the base in `7384460` and
+  `typos` was never added — so agents were being told to reach for binaries
+  that did not exist. Installing them is the cheaper direction of the fix.
+
+### Changed
+
+- `jdk21` → `corretto21` as the default JDK (`JAVA_HOME` follows).
+
 ## [0.2.6] - 2026-08-06
 
 ### Fixed

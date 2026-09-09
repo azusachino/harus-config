@@ -36,6 +36,8 @@
       tokei # count lines of code
       grex # generate regex
       ast-grep # structural code search/rewrite by AST pattern
+      difftastic # difft: syntax-aware diff, compares ASTs not lines
+      typos # fast source-code spell checker
 
       # Development - Tools & Version Control
       git-lfs
@@ -45,7 +47,6 @@
       watchexec
       usage # CLI docs generator
       shellcheck
-      yamlfmt
       # pre-commit — provided inside `nix develop` by the flake's pre-commit-hooks input
 
       # Infrastructure & Cloud
@@ -56,7 +57,6 @@
 
       # Shell & Navigation
       # zoxide — installed via programs.zoxide.enable in fish.nix (binary + shell integration)
-      navi # interactive cheat sheet
 
       # Editors
       # helix — configured via users/haru/helix.nix (programs.helix installs the package)
