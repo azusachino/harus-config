@@ -46,7 +46,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- `jdk21` → `corretto21` as the default JDK (`JAVA_HOME` follows).
+- `jdk21` → `zulu21` as the default JDK (`JAVA_HOME` follows). Corretto was the
+  first choice but is linux-only in nixpkgs, which fails evaluation on the macs;
+  `zulu21` is the same 21.0.11 build on every platform this base targets.
 
 ## [0.2.6] - 2026-08-06
 

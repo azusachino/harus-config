@@ -23,7 +23,7 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     # Java
-    corretto21 # default JDK
+    zulu21 # default JDK; builds on both linux and darwin, unlike corretto
     maven
 
     # Go
@@ -47,5 +47,5 @@
   # nixpkgs JDKs do not export JAVA_HOME. `.home` is the platform-correct JDK
   # home path (handles the darwin layout). When mise activates a different JDK
   # in a project, it re-exports JAVA_HOME and restores this value on exit.
-  home.sessionVariables.JAVA_HOME = "${pkgs.corretto21.home}";
+  home.sessionVariables.JAVA_HOME = "${pkgs.zulu21.home}";
 }
