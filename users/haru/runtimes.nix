@@ -6,7 +6,7 @@
 #
 # Tool split:
 #   nix  → stable default majors + per-language tooling (this file)
-#   mise → per-project version pinning via .mise.toml (e.g. java 8/21, zig 0.16, exact patches)
+#   mise → pinned upstream CLI binaries globally, per-project runtime versions
 #   rustup → rust toolchains (rustup itself lives here; you run `rustup default stable`)
 #   cargo → cargo-installed binaries, and these are deliberately NOT nix'd.
 #           ~/.nix-profile/bin precedes ~/.cargo/bin on PATH, so a nix copy of a
@@ -15,7 +15,8 @@
 #           22.1.1, sqlx-cli 0.8.6 over 0.9.0, neither failing loudly. rustup
 #           above is exempt: nix's and the self-managed one are the same version
 #           and share ~/.rustup/toolchains, so it is a front-end, not a rival.
-#           `cargo install-update -a` is the updater for everything under cargo.
+#           Cargo-only exceptions need explicit review; they are not this base's
+#           binary-only mise manifest (see docs/rust-cli-migration.md).
 #
 # mise's shell activation prepends its shims to PATH inside a pinned project,
 # so a project .mise.toml transparently overrides the runtime defaults below;
@@ -36,11 +37,9 @@
 
     # Python
     python314
-    uv
-    ruff
-    ty
+    # uv/ruff/ty are pinned upstream binaries in the mise manifest.
 
-    # Rust (toolchain manager only — cargo binaries are `cargo install`ed)
+    # Rust toolchains only — general application binaries are mise-owned
     rustup # run `rustup default stable`
   ];
 
