@@ -185,7 +185,7 @@
 
       # fzf into a directory and cd
       fcd = ''
-        set dir (fd --type d $argv | fzf --preview 'eza -la --icons {}')
+        set dir (fd --type d $argv | fzf --preview 'ls -la {}')
         if test -n "$dir"
           cd $dir
         end
@@ -370,9 +370,9 @@
         end
       '';
 
-      # zoxide: fuzzy jump with eza preview (wraps zi with richer preview)
+      # zoxide: fuzzy jump with portable directory preview
       zf = ''
-        set dir (zoxide query --list | fzf --preview 'eza -la --icons {}')
+        set dir (zoxide query --list | fzf --preview 'ls -la {}')
         if test -n "$dir"
           cd $dir
         end
