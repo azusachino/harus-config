@@ -25,8 +25,8 @@
         export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
       ''}
 
-      # Language runtimes (mise-managed)
-      export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:$PATH"
+      # Managed shims/bootstrap win over older manual installations.
+      export PATH="$HOME/.local/share/mise/shims:$HOME/.nix-profile/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:$PATH"
     '';
   };
 }

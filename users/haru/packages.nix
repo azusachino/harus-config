@@ -3,8 +3,8 @@
   lib,
   ...
 }: {
-  # Rust application CLIs live in mise/config.toml + mise.lock, not this closure.
-  # Nix-coupled bootstrap tools remain here; see docs/rust-cli-migration.md.
+  # Portable Rust CLI binaries live in mise/config.toml + mise.lock.
+  # Retain working Nix exceptions when upstream binaries are unavailable.
   home.packages = with pkgs;
     [
       curl
@@ -12,6 +12,8 @@
       dasel
       duckdb
       shfmt
+      eza # retained: no portable upstream binary set
+      tokei # retained: current upstream releases have no binaries
       doggo # Go DNS CLI; not part of the Rust application migration
 
       # Nix & System Tools

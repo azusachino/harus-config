@@ -4,6 +4,23 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2026-10-08
+
+### Fixed
+
+- Restore Nix-owned Tokei/Eza and Eza aliases/directory previews; missing upstream
+  binaries are a packaging exception, not a reason to remove working tools.
+- Keep Starship Nix-owned in the consumer, preserving the executable path cached
+  by existing Fish sessions and the existing private prompt theme.
+- Give managed mise shims and Nix bootstrap precedence over manual Cargo and
+  standalone binaries in Fish, Bash and Zsh, including noninteractive shells.
+- Restore the consumer's Nix resvg helper and original Yazi SVG rendering.
+- Follow the owner's revised policy: 27 minor-version constraints, no managed
+  mise.lock, and no global lock requirement on work projects. Normal
+  `mise install` and `mise upgrade` resolve patch versions; backend verification
+  remains enabled, without a source/quickinstall fallback. This intentionally
+  replaces v0.4.0's exact-pin/digest-matrix policy for lower-maintenance upgrades.
+
 ## [0.4.0] - 2026-10-08
 
 ### Changed

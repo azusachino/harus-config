@@ -53,6 +53,6 @@
     fileWidgetCommand = "fd --type f --hidden --exclude .git";
     fileWidgetOptions = ["--preview 'bat -n --color=always {}'"];
     changeDirWidgetCommand = "fd --type d --hidden --exclude .git";
-    changeDirWidgetOptions = ["--preview 'ls -la {} | head -100'"];
+    changeDirWidgetOptions = ["--preview 'eza -la --icons {} | head -100'"];
   };
 }

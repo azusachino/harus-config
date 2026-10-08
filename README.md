@@ -27,7 +27,7 @@ Factored out of a personal Nix setup so any machine, colleague, or friend can bu
 - **Single identity seam** — `harus.identity` (`name` / `email` / `githubUser`). Override per machine; nothing else carries identity.
 - **Batteries bundled** — `nix-index-database` and `sops-nix` are wired in, so consumers don't need those inputs.
 - **Opt-in runtimes** — default language runtimes and ecosystem tooling (jdk/maven, go, node/bun, python, rust) are a separate module dev machines opt into.
-- **Rust CLI binaries** — mise owns 28 exact upstream binary pins, with platform digests; no Cargo source-build fallback. Home Manager still owns their dotfiles.
+- **Rust CLI binaries** — mise owns 27 minor-version constraints through upstream binary backends, without forcing project locks. Nix retains Tokei/Eza; the consumer retains Starship and original SVG support. Home Manager still owns their dotfiles.
 - **Verified in CI** — every push builds a real home-manager generation on Linux **and** macOS and checks the binary policy.
 
 ## 🚀 Quick start
@@ -72,11 +72,11 @@ Then build and activate:
 nix run home-manager -- switch --flake .#me
 ```
 
-Then, outside a project, put `$HOME/.nix-profile/bin` first on PATH, run `mise install --locked && mise reshim`, and open a new shell. CLI installation is explicit, not a Home Manager activation hook.
+Then, outside a project, put `$HOME/.nix-profile/bin` first on PATH, run `mise install && mise reshim`, and open a new shell. Use `mise upgrade` outside projects for patch updates within the minor constraints. CLI installation is explicit, not a Home Manager activation hook.
 
 See [`example/home.nix`](example/home.nix) for a sample machine module and
-[the Rust CLI migration guide](docs/rust-cli-migration.md) for removed tools,
-strict project-lock requirements and the cargo-binstall assessment.
+[the Rust CLI migration guide](docs/rust-cli-migration.md) for retained Nix
+exceptions, minor-version upgrades, optional project locks and cargo-binstall.
 
 ## 📦 What's exported
 
