@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Keep the shared base's mise installation and shell integration, but leave
+  global tool manifests and trust roots to each consumer.
+
 ## [0.4.2] - 2026-10-08
 
 ### Fixed
@@ -71,8 +78,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - After activation, put `$HOME/.nix-profile/bin` first on PATH, run
   `cd /tmp; mise install --locked && mise reshim`, and open a new shell. There is no network installation during activation.
 - Rustup, language runtime defaults and Nix-specific bootstrap tools stay in Nix.
-  See [the migration guide](docs/rust-cli-migration.md) for security limits and
-  project configuration compatibility.
+  Consumer-specific installation and security policy belongs in the consumer's
+  own documentation.
 
 ## [0.3.0] - 2026-09-09
 

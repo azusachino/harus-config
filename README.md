@@ -27,8 +27,8 @@ Factored out of a personal Nix setup so any machine, colleague, or friend can bu
 - **Single identity seam** — `harus.identity` (`name` / `email` / `githubUser`). Override per machine; nothing else carries identity.
 - **Batteries bundled** — `nix-index-database` and `sops-nix` are wired in, so consumers don't need those inputs.
 - **Opt-in runtimes** — default language runtimes and ecosystem tooling (jdk/maven, go, node/bun, python, rust) are a separate module dev machines opt into.
-- **Rust CLI binaries** — mise owns 19 standalone minor-version utilities without forcing project locks. Nix owns configured applications and their requirements, including shell/Git/FZF helpers, Tokei/Eza, Starship and Yazi.
-- **Verified in CI** — every push builds a real home-manager generation on Linux **and** macOS and checks the binary policy.
+- **Tooling boundary** — the base provides mise and its shell integration; consumers own any global tool manifest and trust scope.
+- **Verified in CI** — every push builds a real home-manager generation on Linux **and** macOS.
 
 ## 🚀 Quick start
 
@@ -43,7 +43,7 @@ Add it as an input and import the module:
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    harus-config.url = "github:azusachino/harus-config/v0.4.2"; # pin a tag
+    harus-config.url = "github:azusachino/harus-config/v0.5.0"; # pin a tag
   };
 
   outputs = {nixpkgs, home-manager, harus-config, ...}: {
@@ -72,17 +72,18 @@ Then build and activate:
 nix run home-manager -- switch --flake .#me
 ```
 
-Then, outside a project, put `$HOME/.nix-profile/bin` first on PATH, run `mise install && mise reshim`, and open a new shell. Use `mise upgrade` outside projects for patch updates within the minor constraints. CLI installation is explicit, not a Home Manager activation hook.
+If your consumer declares global mise tools, install them after activation with
+`mise install && mise reshim`; the shared base does not deploy a global manifest
+or install tools through a Home Manager activation hook.
 
 See [`example/home.nix`](example/home.nix) for a sample machine module and
-[the Rust CLI migration guide](docs/rust-cli-migration.md) for retained Nix
-exceptions, minor-version upgrades, optional project locks and cargo-binstall.
+[the mise consumer guide](docs/rust-cli-migration.md) for the ownership boundary.
 
 ## 📦 What's exported
 
 | Output | Contents |
 | --- | --- |
-| `homeManagerModules.default` | Shell (bash/zsh/fish), a plain neovim editor, git + delta, gh, direnv, mise, atuin + the `harus.identity` option. Bundles `nix-index-database` and `sops-nix`. |
+| `homeManagerModules.default` | Shell (bash/zsh/fish), a plain neovim editor, git + delta, gh, direnv, mise (without a global tool manifest), atuin + the `harus.identity` option. Bundles `nix-index-database` and `sops-nix`. |
 | `homeManagerModules.runtimes` | Default language runtimes and ecosystem tooling (jdk/maven, go, node/bun, python, rust) — opt in per machine. |
 | `checks.<system>.exampleHome` | Builds a full home-manager generation from the base (what CI runs). |
 | `formatter.<system>` | `alejandra`, via `nix fmt`. |
@@ -109,7 +110,7 @@ by commit hash in your `flake.lock`, but tags give you a stable, human-readable
 reference:
 
 ```nix
-harus-config.url = "github:azusachino/harus-config/v0.3.0"; # pinned
+harus-config.url = "github:azusachino/harus-config/v0.5.0"; # pinned
 # or track the latest:
 harus-config.url = "github:azusachino/harus-config";        # main
 ```

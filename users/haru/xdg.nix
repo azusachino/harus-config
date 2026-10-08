@@ -9,8 +9,7 @@
     XDG_CACHE_HOME = "$HOME/.cache";
   };
 
-  # Shims also cover noninteractive shells and Git pager invocations.
-  # Run mise install && mise reshim after activation; project locks are optional.
+  # Provide shims for consumers that declare global mise tools.
   home.sessionPath = ["$HOME/.local/share/mise/shims"];
 
   home.file.".npmrc".text = ''
@@ -32,12 +31,6 @@
   '';
 
   xdg.configFile = {
-    # Standalone CLI minor constraints; projects choose their own lock policy.
-    "mise" = {
-      source = ./mise;
-      recursive = true;
-    };
-
     # uv — exclude packages newer than 7 days
     "uv/uv.toml".text = ''
       exclude-newer = "7 days"
