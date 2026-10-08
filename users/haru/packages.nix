@@ -3,7 +3,6 @@
   lib,
   ...
 }: {
-  # Only standalone Rust utilities live in mise/config.toml (no lockfile).
   # Application dependencies and retained tools remain Nix-owned.
   home.packages = with pkgs;
     [

@@ -6,7 +6,7 @@
 #
 # Tool split:
 #   nix  → stable default majors + per-language tooling (this file)
-#   mise → pinned upstream CLI binaries globally, per-project runtime versions
+#   mise → consumer-owned CLI manifests, per-project runtime versions
 #   rustup → rust toolchains (rustup itself lives here; you run `rustup default stable`)
 #   cargo → cargo-installed binaries, and these are deliberately NOT nix'd.
 #           ~/.nix-profile/bin precedes ~/.cargo/bin on PATH, so a nix copy of a
@@ -16,7 +16,7 @@
 #           above is exempt: nix's and the self-managed one are the same version
 #           and share ~/.rustup/toolchains, so it is a front-end, not a rival.
 #           Cargo-only exceptions need explicit review; they are not this base's
-#           binary-only mise manifest (see docs/rust-cli-migration.md).
+#           binary-only mise manifest, if the consumer chooses one.
 #
 # mise's shell activation prepends its shims to PATH inside a pinned project,
 # so a project .mise.toml transparently overrides the runtime defaults below;

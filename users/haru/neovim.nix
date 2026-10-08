@@ -7,7 +7,7 @@
 # machines pin by tag — otherwise changing a keymap costs a release, a tag and an
 # input bump. The private consumer's `users/haru/neovim.nix` adds only quick-edit
 # options; no LazyVim, language servers or formatter dependencies. Future editor
-# requirements belong in the editor's Nix module, never the global mise manifest.
+# requirements belong in the editor's Nix module, never a consumer's CLI manifest.
 #
 # What stays here is the part a stranger consuming the base would want anyway:
 # `nvim`, `vi` and `vim` all exist and open a usable editor.
