@@ -4,6 +4,10 @@
   # programs.mise.enableZshIntegration.
   programs.zsh = {
     enable = true;
+    envExtra = ''
+      # Also enforce managed binary priority in noninteractive shells.
+      export PATH="$HOME/.local/share/mise/shims:$HOME/.nix-profile/bin:$PATH"
+    '';
     initContent = lib.mkAfter ''
       if command -v zoxide >/dev/null 2>&1; then
         eval "$(zoxide init zsh)"

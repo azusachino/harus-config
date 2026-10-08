@@ -1,62 +1,58 @@
 #!/usr/bin/env python3
-"""Validate the binary-only global manifest without downloading/executing tools."""
+"""Validate the owner's minor-pin, optional-lock CLI policy without downloads."""
 import copy
 from pathlib import Path
 import re
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
-PLATFORMS = ("linux-x64", "linux-arm64", "macos-arm64")
 
 
-def validate(config, lock):
+def validate(config):
     settings = config["settings"]
-    for key in ("locked", "locked_verify_provenance"):
-        assert settings.get(key) is True, f"{key} must be enabled"
+    assert not settings.get("locked", False), "do not force locks on projects"
+    assert not settings.get("lockfile", False), "do not generate global locks"
     for key in ("auto_install", "exec_auto_install", "not_found_auto_install"):
         assert settings.get(key) is False, f"{key} must be disabled"
     assert {"cargo", "asdf"} <= set(settings["disable_backends"])
     assert not settings.get("trusted_config_paths"), "no blanket project trust"
     for key in ("cosign", "github_attestations", "minisign", "slsa"):
         assert settings["aqua"].get(key) is True, f"aqua.{key} must be enabled"
-    assert set(config["tools"]) == set(lock["tools"]), "config/lock tool mismatch"
+    assert config["tools"], "missing CLI manifest"
     for tool, version in config["tools"].items():
-        backend, repo = tool.split(":", 1)
+        backend, _ = tool.split(":", 1)
         assert backend in ("aqua", "github"), f"nonbinary backend: {tool}"
-        assert re.fullmatch(r"\d+\.\d+\.\d+", version), f"inexact pin: {tool}"
-        entries = lock["tools"][tool]
-        assert len(entries) == 1, f"ambiguous lock: {tool}"
-        entry = entries[0]
-        assert entry["version"] == version and entry["backend"] == tool
-        for platform in PLATFORMS:
-            artifact = entry.get("platforms." + platform, {})
-            url = artifact.get("url", "")
-            assert url.startswith(f"https://github.com/{repo}/releases/download/"), (tool, platform, url)
-            assert re.fullmatch(r"sha256:[0-9a-f]{64}", artifact.get("checksum", "")), (tool, platform, "missing digest")
-            assert "/" + version + "/" in url or "/v" + version + "/" in url, (tool, platform, "wrong release")
-            asset = url.rsplit("/", 1)[1]
-            arch_names = ("x86_64", "amd64") if platform == "linux-x64" else ("aarch64", "arm64", "universal")
-            assert any(arch in asset for arch in arch_names), (tool, platform, "wrong architecture")
+        assert re.fullmatch(r"\d+\.\d+", version), f"not a minor pin: {tool}"
+    assert "github:starship/starship" not in config["tools"], "Starship stays Nix-owned"
 
 
 def main():
     config = tomllib.loads((ROOT / "users/haru/mise/config.toml").read_text())
-    lock = tomllib.loads((ROOT / "users/haru/mise/mise.lock").read_text())
-    validate(config, lock)
-    tool = next(iter(config["tools"]))
-    # Regression checks: the gate must reject weakened policy and incomplete locks.
-    bad_config = copy.deepcopy(config)
-    bad_config["settings"]["locked"] = False
-    bad_lock = copy.deepcopy(lock)
-    del bad_lock["tools"][tool][0]["platforms.macos-arm64"]["checksum"]
-    for c, l in ((bad_config, lock), (config, bad_lock)):
+    validate(config)
+    assert not (ROOT / "users/haru/mise/mise.lock").exists(), "no managed mise lock"
+    packages = (ROOT / "users/haru/packages.nix").read_text()
+    for tool in ("tokei", "eza"):
+        assert re.search(rf"^\s+{tool}\s", packages, re.M), f"retain Nix {tool}"
+    # Negative fixtures protect the owner-selected policy, not the old lock mandate.
+    fixtures = []
+    for setting in ("locked", "lockfile", "auto_install"):
+        bad = copy.deepcopy(config)
+        bad["settings"][setting] = True
+        fixtures.append(bad)
+    bad = copy.deepcopy(config)
+    bad["tools"][next(iter(config["tools"]))] = "latest"
+    fixtures.append(bad)
+    bad = copy.deepcopy(config)
+    bad["tools"]["cargo:example"] = "1.0"
+    fixtures.append(bad)
+    for bad in fixtures:
         try:
-            validate(c, l)
+            validate(bad)
         except AssertionError:
             pass
         else:
             raise AssertionError("policy gate accepted an unsafe fixture")
-    print(f"binary policy: {len(config['tools'])} exact pins, {len(config['tools']) * len(PLATFORMS)} upstream artifacts; negative checks pass")
+    print(f"CLI policy: {len(config['tools'])} minor pins, optional project locks, Nix exceptions retained; negative checks pass")
 
 
 if __name__ == "__main__":

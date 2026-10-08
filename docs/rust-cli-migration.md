@@ -1,126 +1,89 @@
 # Rust CLI binaries via mise
 
-## Acceptance contract
+## Ownership
 
-- General Rust CLI applications no longer enter the Home Manager build closure.
-  This includes procs, ouch, typos and oha from the reported 27-minute rebuild.
-- Global CLI requests use exact versions and explicit binary download backends.
-  Every request has an upstream HTTPS artifact URL and SHA-256 digest for
-  linux-x64, linux-arm64 and macos-arm64 in the committed mise.lock.
-- Installation fails closed for missing lock entries, corrupted downloads or
-  unavailable binaries. No Cargo compilation, quickinstall or executable asdf
-  plugins are part of this installation path. Shell lookup never installs tools.
-- Home Manager retains dotfile ownership, Git delta settings, bat defaults,
-  Atuin's non-executing history selection and zoxide/Atuin shell hooks.
-- Rust toolchains remain rustup-owned. Nix-specific bootstrap tools remain Nix-owned.
-- Repository checks and a fresh independent verification pass must succeed before
-  release. The consumer updates its base tag and lock together, preserving any
-  unrelated lockfile changes. Fleet activation is separately authorized.
+Mise owns 27 portable Rust application CLIs, using explicit Aqua/GitHub binary
+backends and `major.minor` version constraints in `users/haru/mise/config.toml`.
+Patch versions can advance without editing the manifest. There is no managed
+mise lockfile and no global requirement that projects use locks.
 
-## Ownership and bootstrap
+Nix retains Tokei and Eza because acceptable portable upstream binaries are
+unavailable. The private consumer retains its normal Nix Starship package and
+existing prompt theme, and Nix resvg for original Yazi SVG rendering. These are
+explicit exceptions: keep working functionality instead of removing it.
+Nix also retains mise itself, rustup, language runtime defaults and Nix-specific
+utilities. Rust toolchains remain rustup-owned.
 
-Home Manager deploys `users/haru/mise/` as the global mise configuration and
-lockfile. It no longer compiles the 28 applications declared there, including
-uv/ruff/ty and the binaries for consumer-owned StyLua, Starship and Yazi configs.
-Their binary pins are shared; personal prompt/file-manager/editor configuration
-stays in the private consumer. All binary pins are global, including on lean
-machines; language runtime module imports remain unchanged. Nix still
-provides mise itself, rustup, nh and Nix-specific utilities: mise cannot install
-its own prerequisite, and Nix integration tools are not general application CLIs.
-Language runtime defaults are unchanged.
+Home Manager still owns the application dotfiles, bat defaults, Git delta
+settings, Atuin/zoxide shell hooks and private editor/file-manager settings.
+Eza powers `l` and directory previews again. Managed shims and Nix bootstrap
+precede manual Cargo/standalone binaries in Fish, Bash and Zsh.
 
-After switching a machine, explicitly install the reviewed tools from outside a
-project, then generate shims and open a new shell:
+## Install and upgrade
+
+After activation, install global tools outside a project:
 
 ```sh
 cd /tmp
 export PATH="$HOME/.nix-profile/bin:$PATH"
-mise install --locked
+mise install
 mise reshim
 ```
 
-The PATH export is required when an older standalone mise shadows the Nix
-bootstrap: `mise reshim` selects its shim executable from PATH, even when you
-invoke the Nix binary by absolute path. Confirm `command -v mise` resolves through
-`.nix-profile/bin` before installation/reshimming; do not delete unrelated binaries
-as part of this migration.
-
-Home Manager adds the shim directory to session PATH for noninteractive commands
-and Git's delta pager. The shell hooks initialize Atuin/zoxide only when available;
-no install is triggered by a shell startup. Until the explicit install completes,
-commands that use those CLIs (including the Git pager) are unavailable.
-
-Global strict locked mode also applies to per-project tools: projects must supply
-complete lock entries before installation. Explicitly review/trust each project;
-broad automatic trust of `~/Projects` and `~/Working` is removed. Disabling Cargo
-and asdf backends is intentional; existing projects using them need a reviewed
-binary backend or a separately approved exception, not a silent source build.
-
-Tokei's current releases publish no binary assets. Eza publishes no native macOS
-binaries. Per the owner's decision, both are omitted from the portable global
-set, without downgrading or substituting third-party binaries. `l` and the fzf
-directory preview use `ls`. Linux-only Eza can be added later with a reviewed
-platform-specific binary manifest.
-
-## Supply-chain wall and its limits
-
-Pins, explicit upstream download URLs and committed digests constrain what gets
-installed. Aqua verification settings stay enabled, and locked installations
-reverify available provenance. `github:` is used for procs, grex, difftastic,
-dust, hyperfine, oha and ouch because the flake's mise 2026.5.12 Aqua snapshot lacks
-complete native binary support for those releases (including Rosetta-only recipes). Their lock entries still require exact upstream assets/digests.
-Neither binary backend needs cargo-binstall.
-
-Do not infer publisher authentication from a SHA-256 hash alone. Some releases
-supply signatures/attestations, others supply only a GitHub release digest or a
-hash calculated while generating the lock. Review the initial publisher, asset,
-version and digest together. Pins cannot prevent a compromised upstream release,
-compromised mise/Nix bootstrap, or an owner overriding policy locally. No release
-age quarantine was requested. This is not a Cargo project dependency audit.
-
-`mise lock` can exit successfully with incomplete entries (including after API
-rate limits). `make check-policy` independently rejects such locks. Generate
-updates in a writable local project copy of the config, with GitHub authentication
-if necessary; never mutate Home Manager's read-only store copy. Review the complete
-config/lock diff and run a clean locked install before committing. Disable strict
-mode only for the controlled generation command (`MISE_LOCKED=0 mise lock ...`),
-not in the deployed policy.
-
-The upstream sd v1.1.0 asset reports `sd 1.0.0`; its tagged Cargo.toml also declares
-1.0.0. The reviewed pin is the v1.1.0 release asset and digest, not its stale
-embedded version string.
-
-## cargo-binstall assessment
-
-cargo-binstall is **not necessary for this manifest**, and is not added to Nix or
-mise merely to download Rust applications. It remains useful for independently
-managed cargo-only binaries if their authors publish compatible binary artifacts.
-The installed cargo-binstall 1.23.0 defaults to
-`crate-meta-data,quick-install,compile`: those defaults violate this policy.
-
-For a separately reviewed cargo-only exception, use an exact crate version and
-explicitly prohibit compilation and third-party quickinstall:
+Installations are explicit; shell startup and command lookup do not install
+software. To update patches within the configured minor versions:
 
 ```sh
-cargo binstall CRATE@EXACT_VERSION --disable-strategies compile,quick-install \
-  --only-signed --disable-telemetry
+cd /tmp
+mise upgrade
+mise reshim
 ```
 
-`--only-signed` fails when publisher signatures are absent. It is not equivalent
-to mise's reviewed artifact lock, and this command is not an approved exception by
-itself. `cargo install --locked` locks build dependencies; it does **not** mean
-binary-only, and rebuilding with cargo-update would reintroduce the original pain.
+For a new minor version, edit the shared config's constraint and apply Home
+Manager. The managed global config is read-only; do not use `mise use -g` to
+rewrite its symlink. Nix-owned tool versions are updated through the Nix inputs,
+not separate upstream-release packaging.
 
-## Sources
+Projects remain free to use `latest`, minor constraints, exact versions or their
+own lockfiles. Normal project commands such as `mise use bun@latest` and
+`mise install` do not require a lock. Review/trust project configuration
+explicitly. If an existing shell inherited `MISE_LOCKED=1`, remove that variable
+(`set -e MISE_LOCKED` in Fish); `set -gx MISE_LOCKED 0` temporarily disables it.
+Do not force project lockfiles solely to make these globals work.
 
-- [mise Aqua backend](https://mise.jdx.dev/dev-tools/backends/aqua.html)
-- [mise GitHub backend](https://mise.jdx.dev/dev-tools/backends/github.html)
-- [mise Cargo backend](https://mise.jdx.dev/dev-tools/backends/cargo.html)
-- [mise lockfiles](https://mise.jdx.dev/dev-tools/mise-lock.html)
-- [cargo-binstall](https://github.com/cargo-bins/cargo-binstall)
-- [Tokei releases](https://github.com/XAMPPRocky/tokei/releases)
-- [Eza releases](https://github.com/eza-community/eza/releases)
+## Fish prompt recovery
 
-Online mise documentation can describe newer features than the flake-provided
-version. The deployed configuration is checked against mise 2026.5.12; do not
-copy newer settings without testing that bootstrap version.
+A Fish session started before the migration may have cached
+`~/.nix-profile/bin/starship` in its generated prompt functions. Starship is
+Nix-owned again, restoring that executable path. For a clean refresh of all
+shell hooks after activation:
+
+```fish
+exec ~/.nix-profile/bin/fish --login
+```
+
+Do not delete unrelated manually installed binaries. PATH precedence handles
+old Cargo/standalone copies without modifying them.
+
+## Verification and trade-offs
+
+`make check-policy` validates minor constraints, explicit binary backends,
+optional project locks, retained Nix exceptions and disabled automatic installs,
+including negative fixtures. Run the owning flake/format gates and actual Fish
+interactive/noninteractive, Bash/Zsh, Git-pager and editor/file-manager journeys.
+Linux runtime and real UI checks must be reported separately from structural
+flake evaluation. Releases follow the owning workstation verification rules;
+machine activation requires explicit target approval.
+
+The owner replaced v0.4.0's exact global locks with this lower-maintenance policy
+because global locked mode broke ordinary work-project version resolution.
+Minor constraints are not reproducible patch pins. There is no committed
+artifact-digest matrix; use the selected backend's available upstream checksums,
+signatures and attestations. Aqua verification options stay enabled, but do not
+claim every upstream publishes equivalent provenance or that every future
+patch is already tested. Cargo/asdf backends remain disabled; no quickinstall
+or source-build fallback is introduced for these globals.
+
+Cargo-binstall is unnecessary for this manifest. Its default quickinstall/source
+fallback is not an approved way to bypass a missing upstream binary; retain a
+working Nix package instead of dropping functionality.

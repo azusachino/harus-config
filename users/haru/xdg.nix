@@ -10,7 +10,7 @@
   };
 
   # Shims also cover noninteractive shells and Git pager invocations.
-  # Run mise install --locked && mise reshim after activation.
+  # Run mise install && mise reshim after activation; project locks are optional.
   home.sessionPath = ["$HOME/.local/share/mise/shims"];
 
   home.file.".npmrc".text = ''

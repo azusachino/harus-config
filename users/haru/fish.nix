@@ -38,6 +38,10 @@
       # outside Nix and leaks stale entries (e.g. old JDKs) into GUI tools.
       fish_add_path -g ~/.local/bin ~/.cargo/bin ~/go/bin ~/.bun/bin
 
+      # Managed binaries must beat older manual Cargo/standalone installs,
+      # including noninteractive shells where mise activation does not run.
+      fish_add_path --global --prepend --move ~/.local/share/mise/shims ~/.nix-profile/bin
+
       # Machine-local secrets — not tracked in Nix (NOTION_API_KEY etc.)
       if test -f ~/.config/fish/secrets.fish
         source ~/.config/fish/secrets.fish
@@ -63,7 +67,7 @@
 
     shellAliases = {
       # Files
-      l = "ls -la"; # eza has no upstream macOS binary
+      l = "eza -la --icons";
       bat = "bat -p";
       cls = "clear";
       # Kubernetes
@@ -185,7 +189,7 @@
 
       # fzf into a directory and cd
       fcd = ''
-        set dir (fd --type d $argv | fzf --preview 'ls -la {}')
+        set dir (fd --type d $argv | fzf --preview 'eza -la --icons {}')
         if test -n "$dir"
           cd $dir
         end
@@ -372,7 +376,7 @@
 
       # zoxide: fuzzy jump with portable directory preview
       zf = ''
-        set dir (zoxide query --list | fzf --preview 'ls -la {}')
+        set dir (zoxide query --list | fzf --preview 'eza -la --icons {}')
         if test -n "$dir"
           cd $dir
         end
