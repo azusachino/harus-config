@@ -4,6 +4,25 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2026-10-08
+
+### Fixed
+
+- Restore Nix-owned fd/ripgrep, bat, Delta, Atuin and zoxide for configured
+  FZF/Git/shell/editor workflows; use their native Home Manager integrations.
+- Keep only 19 standalone Rust utilities in mise, with minor constraints and
+  no global lockfile. Yazi returns to its normal Nix package/helper wrapper.
+- Application requirements no longer rely on mise installation; retain the
+  existing checks and verify the actual application workflows.
+
+### Consumer
+
+- Trim Neovim to plain quick terminal editing: built-in syntax/search/clipboard,
+  line numbers and indentation; no LazyVim, LSP, Treesitter bundles or autoformat.
+  StyLua is no longer required; Ruff remains a standalone CLI.
+- Select normal Nix unstable Atuin: stable 18.15 rejects the migrated history
+  schema; unstable 18.21 passes a schema-only probe without reading history.
+
 ## [0.4.1] - 2026-10-08
 
 ### Fixed

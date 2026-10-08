@@ -40,8 +40,28 @@
   };
   programs.nix-index.enable = true;
 
-  # Atuin/bat binaries are mise-owned; their dotfiles live in xdg.nix.
-  # fzf uses mise-owned fd/bat and a portable directory preview.
+  # Shell/editor integrations and their dependencies remain Nix-owned.
+  programs.atuin = {
+    enable = true;
+    flags = ["--disable-up-arrow"];
+    settings = {
+      enter_accept = false;
+      inline_height = 20;
+      style = "compact";
+      show_preview = true;
+      keymap_mode = "auto";
+    };
+  };
+  programs.bat = {
+    enable = true;
+    config = {
+      theme = "TwoDark";
+      style = "changes,header";
+    };
+  };
+  programs.zoxide.enable = true;
+
+  # fzf uses Nix fd/bat/Eza, independent of mise installation.
   programs.fzf = {
     enable = true;
     defaultCommand = "fd --type f --hidden --exclude .git";

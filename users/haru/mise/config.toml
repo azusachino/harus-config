@@ -1,6 +1,7 @@
-# Rust CLI release binaries, pinned to minor versions; patches via mise upgrade.
+# Standalone Rust CLI binaries only; minor constraints, patches via mise upgrade.
 # No global lock requirement or managed mise.lock. Projects choose their own policy.
-# Rust toolchains remain rustup-owned; Nix retains Tokei/Eza and Starship.
+# Nix owns application dependencies, shell integrations, editors and Yazi.
+# Rust toolchains remain rustup-owned; Nix also retains Tokei/Eza.
 [settings]
 auto_install = false
 exec_auto_install = false
@@ -13,7 +14,6 @@ disable_backends = ["cargo", "asdf"]
 
 [tools]
 "aqua:ducaale/xh" = "0.26"
-"aqua:sharkdp/fd" = "10.5"
 "aqua:chmln/sd" = "1.1"
 "github:bootandy/dust" = "1.2"
 "aqua:bensadeh/tailspin" = "7.0"
@@ -29,13 +29,6 @@ disable_backends = ["cargo", "asdf"]
 "aqua:watchexec/watchexec" = "2.8"
 "aqua:jdx/usage" = "6.12"
 "github:ouch-org/ouch" = "0.8"
-"aqua:BurntSushi/ripgrep" = "15.2"
-"aqua:sharkdp/bat" = "0.26"
-"aqua:dandavison/delta" = "0.20"
-"aqua:atuinsh/atuin" = "18.23"
-"aqua:ajeetdsouza/zoxide" = "0.10"
 "github:astral-sh/uv" = "0.12"
 "github:astral-sh/ruff" = "0.16"
 "github:astral-sh/ty" = "0.0"
-"github:JohnnyMorganz/StyLua" = "2.5"
-"github:sxyazi/yazi" = "26.9"

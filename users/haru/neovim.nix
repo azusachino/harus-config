@@ -5,9 +5,9 @@
 # config is a dotfile you want to own directly, and this repo's placement rule
 # sends those to the private consumer rather than to a public base that six
 # machines pin by tag — otherwise changing a keymap costs a release, a tag and an
-# input bump. The LazyVim setup that used to live here now sits in
-# harus-nix (`users/haru/neovim.nix`), which dev machines opt into the same way
-# they opt into `homeManagerModules.runtimes`; lean machines get just this.
+# input bump. The private consumer's `users/haru/neovim.nix` adds only quick-edit
+# options; no LazyVim, language servers or formatter dependencies. Future editor
+# requirements belong in the editor's Nix module, never the global mise manifest.
 #
 # What stays here is the part a stranger consuming the base would want anyway:
 # `nvim`, `vi` and `vim` all exist and open a usable editor.

@@ -37,7 +37,7 @@
 
     # Python
     python314
-    # uv/ruff/ty are pinned upstream binaries in the mise manifest.
+    # uv/ruff/ty are standalone mise utilities, not dependencies of plain Neovim.
 
     # Rust toolchains only — general application binaries are mise-owned
     rustup # run `rustup default stable`
