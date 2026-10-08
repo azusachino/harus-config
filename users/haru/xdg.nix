@@ -32,24 +32,11 @@
   '';
 
   xdg.configFile = {
-    # Reviewed global CLI pins and platform artifact digests travel together.
+    # Standalone CLI minor constraints; projects choose their own lock policy.
     "mise" = {
       source = ./mise;
-      recursive = true; # both symlink targets share one store directory/lock root
+      recursive = true;
     };
-
-    "bat/config".text = ''
-      --theme=TwoDark
-      --style=changes,header
-    '';
-    "atuin/config.toml".text = ''
-      # Enter puts history into the prompt for review instead of executing it.
-      enter_accept = false
-      inline_height = 20
-      style = "compact"
-      show_preview = true
-      keymap_mode = "auto"
-    '';
 
     # uv — exclude packages newer than 7 days
     "uv/uv.toml".text = ''

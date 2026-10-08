@@ -27,7 +27,7 @@ Factored out of a personal Nix setup so any machine, colleague, or friend can bu
 - **Single identity seam** — `harus.identity` (`name` / `email` / `githubUser`). Override per machine; nothing else carries identity.
 - **Batteries bundled** — `nix-index-database` and `sops-nix` are wired in, so consumers don't need those inputs.
 - **Opt-in runtimes** — default language runtimes and ecosystem tooling (jdk/maven, go, node/bun, python, rust) are a separate module dev machines opt into.
-- **Rust CLI binaries** — mise owns 27 minor-version constraints through upstream binary backends, without forcing project locks. Nix retains Tokei/Eza; the consumer retains Starship and original SVG support. Home Manager still owns their dotfiles.
+- **Rust CLI binaries** — mise owns 19 standalone minor-version utilities without forcing project locks. Nix owns configured applications and their requirements, including shell/Git/FZF helpers, Tokei/Eza, Starship and Yazi.
 - **Verified in CI** — every push builds a real home-manager generation on Linux **and** macOS and checks the binary policy.
 
 ## 🚀 Quick start
@@ -43,7 +43,7 @@ Add it as an input and import the module:
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    harus-config.url = "github:azusachino/harus-config/v0.4.0"; # pin a tag
+    harus-config.url = "github:azusachino/harus-config/v0.4.2"; # pin a tag
   };
 
   outputs = {nixpkgs, home-manager, harus-config, ...}: {

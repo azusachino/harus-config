@@ -2,7 +2,7 @@
 
 ## Ownership
 
-Mise owns 27 portable Rust application CLIs, using explicit Aqua/GitHub binary
+Mise owns 19 standalone Rust utilities, using explicit Aqua/GitHub binary
 backends and `major.minor` version constraints in `users/haru/mise/config.toml`.
 Patch versions can advance without editing the manifest. There is no managed
 mise lockfile and no global requirement that projects use locks.
@@ -14,8 +14,20 @@ explicit exceptions: keep working functionality instead of removing it.
 Nix also retains mise itself, rustup, language runtime defaults and Nix-specific
 utilities. Rust toolchains remain rustup-owned.
 
-Home Manager still owns the application dotfiles, bat defaults, Git delta
-settings, Atuin/zoxide shell hooks and private editor/file-manager settings.
+Nix owns applications and their configured requirements, not just dotfiles:
+fd/ripgrep/bat support FZF/Yazi/editor workflows, Delta is the Git pager, and
+Atuin/zoxide are native Home Manager shell integrations. Yazi uses its normal
+Nix package/helper wrapper. Neovim is plain quick editing without plugin managers,
+LSP or automatic formatters; StyLua is not needed, and Ruff is a standalone CLI.
+If editor features are added later, provision their requirements with Nix and
+revisit dual-use tool ownership instead of silently adding a mise dependency.
+
+Atuin database versions require care when returning from mise to Nix. Stable
+18.15 cannot read migrations created during the earlier migration; the private
+consumer uses its existing Nix unstable channel (18.21), which passed a
+schema-only compatibility probe. Do not delete/reset history to work around a
+downgrade. Other consumers must check their selected Nix package's compatibility.
+
 Eza powers `l` and directory previews again. Managed shims and Nix bootstrap
 precede manual Cargo/standalone binaries in Fish, Bash and Zsh.
 
@@ -71,6 +83,8 @@ old Cargo/standalone copies without modifying them.
 optional project locks, retained Nix exceptions and disabled automatic installs,
 including negative fixtures. Run the owning flake/format gates and actual Fish
 interactive/noninteractive, Bash/Zsh, Git-pager and editor/file-manager journeys.
+Application workflows must also run with no mise binaries on PATH. Plain Neovim
+must open/edit/save without loading LazyVim, LSP or formatting plugins.
 Linux runtime and real UI checks must be reported separately from structural
 flake evaluation. Releases follow the owning workstation verification rules;
 machine activation requires explicit target approval.
