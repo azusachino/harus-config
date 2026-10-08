@@ -45,7 +45,15 @@
 
     '';
 
-    interactiveShellInit = ''
+    interactiveShellInit = lib.mkAfter ''
+      # Runtime hooks avoid building Rust applications inside Home Manager.
+      if command -q zoxide
+        zoxide init fish | source
+      end
+      if command -q atuin
+        atuin init fish --disable-up-arrow | source
+      end
+
       # Completions for custom functions
       complete -c work -f -a '(ls ~/Working 2>/dev/null; ls ~/Projects 2>/dev/null)'
       complete -c tms -f -a '(tmux list-sessions -F "#S" 2>/dev/null)'
@@ -55,7 +63,7 @@
 
     shellAliases = {
       # Files
-      l = "eza -la --icons";
+      l = "ls -la"; # eza has no upstream macOS binary
       bat = "bat -p";
       cls = "clear";
       # Kubernetes
@@ -481,8 +489,5 @@
     };
   };
 
-  # Shell integrations — each module installs the binary and wires the fish hook
-  # programs.mise    → default.nix
-  # programs.starship → starship.nix
-  programs.zoxide.enable = true;
+  # mise owns zoxide/atuin binaries; hooks above run after mise activation.
 }

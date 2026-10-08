@@ -9,6 +9,10 @@
     XDG_CACHE_HOME = "$HOME/.cache";
   };
 
+  # Shims also cover noninteractive shells and Git pager invocations.
+  # Run mise install --locked && mise reshim after activation.
+  home.sessionPath = ["$HOME/.local/share/mise/shims"];
+
   home.file.".npmrc".text = ''
     min-release-age=7
     ignore-scripts=true
@@ -28,16 +32,23 @@
   '';
 
   xdg.configFile = {
-    # mise global config — all haru machines
-    "mise/config.toml".text = ''
-      # Global mise config — settings only.
-      #
-      # Language runtime *defaults* now come from nix (users/haru/runtimes.nix).
-      # mise is for per-project version pinning: drop a .mise.toml in a repo to
-      # override the nix default (e.g. java = "corretto-21", node = "20.11.1",
-      # zig = "0.16"). rust is managed by rustup (not nix/mise).
-      [settings]
-      trusted_config_paths = ["~/Projects", "~/Working"]
+    # Reviewed global CLI pins and platform artifact digests travel together.
+    "mise" = {
+      source = ./mise;
+      recursive = true; # both symlink targets share one store directory/lock root
+    };
+
+    "bat/config".text = ''
+      --theme=TwoDark
+      --style=changes,header
+    '';
+    "atuin/config.toml".text = ''
+      # Enter puts history into the prompt for review instead of executing it.
+      enter_accept = false
+      inline_height = 20
+      style = "compact"
+      show_preview = true
+      keymap_mode = "auto"
     '';
 
     # uv — exclude packages newer than 7 days

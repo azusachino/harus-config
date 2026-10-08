@@ -3,68 +3,36 @@
   lib,
   ...
 }: {
+  # Rust application CLIs live in mise/config.toml + mise.lock, not this closure.
+  # Nix-coupled bootstrap tools remain here; see docs/rust-cli-migration.md.
   home.packages = with pkgs;
     [
-      # Core Utilities
       curl
-      xh # fast HTTP client (Rust httpie) for API testing/debug
       jq
-      dasel # query/convert JSON/YAML/TOML/XML/CSV in one tool
-      duckdb # analytical SQL over CSV/JSON/Parquet, no server; `duckdb -c` is script/agent friendly
+      dasel
+      duckdb
       shfmt
-      eza
-      # bat — installed via programs.bat.enable in home.nix (binary + config)
-      ripgrep
-      fd
-      sd # intuitive find & replace (modern sed)
-      dust
-      tailspin
-      hexyl # colored hex viewer
-      doggo # modern dig: clean DNS lookups
+      doggo # Go DNS CLI; not part of the Rust application migration
 
       # Nix & System Tools
-      nh # ergonomic nix/home-manager workflow helper
-      nix-output-monitor # nom: colorful nix build progress
-      nix-tree # interactive closure explorer (why is this in the closure?)
-      comma # run any binary on demand via nix-index (`, <cmd>`)
+      nh
+      nix-output-monitor
+      nix-tree
+      comma
       btop
-      procs # modern ps: tree view, search, ports
-      hyperfine # command-line benchmarking
-      oha # modern benchmark tool
-
-      # Code stats & utilities (language-agnostic)
-      tokei # count lines of code
-      grex # generate regex
-      ast-grep # structural code search/rewrite by AST pattern
-      difftastic # difft: syntax-aware diff, compares ASTs not lines
-      typos # fast source-code spell checker
 
       # Development - Tools & Version Control
       git-lfs
-      git-cliff # changelog generator from conventional commits
       sops
       age
-      watchexec
-      usage # CLI docs generator
       shellcheck
-      # pre-commit — provided inside `nix develop` by the flake's pre-commit-hooks input
 
       # Infrastructure & Cloud
       rclone
-
-      # File Management & Media
-      ouch # modern unified compress/extract (Rust)
-
-      # Shell & Navigation
-      # zoxide — installed via programs.zoxide.enable in fish.nix (binary + shell integration)
-
-      # Editors
-      # helix — configured via users/haru/helix.nix (programs.helix installs the package)
     ]
     ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
-      # Container toolkit (Linux only — rootless, daemonless)
       podman
-      buildah # build OCI images without a daemon
-      skopeo # inspect/copy container images
+      buildah
+      skopeo
     ];
 }

@@ -53,6 +53,13 @@
     # `nix flake check` builds a real home-manager generation from the base,
     # proving the module composes on each supported system.
     checks = forAllSystems (system: {
+      rustBinaryPolicy =
+        nixpkgs.legacyPackages.${system}.runCommand "rust-binary-policy" {
+          nativeBuildInputs = [nixpkgs.legacyPackages.${system}.python3];
+        } ''
+          python3 ${./.}/scripts/check-rust-policy.py
+          touch "$out"
+        '';
       exampleHome =
         (home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.${system};

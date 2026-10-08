@@ -4,6 +4,40 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-10-08
+
+### Changed
+
+- Move 28 general Rust CLIs from the Nix build closure into exact mise binary
+  pins, with upstream URLs and SHA-256 digests for all three supported platforms.
+  This avoids the reported 13–24 minute application recompilations.
+- Keep bat/Atuin dotfiles, Git delta settings and shell hooks in Home Manager;
+  expose binaries through mise activation and noninteractive shims. Include
+  uv/ruff/ty and binaries for consumer-owned StyLua, Starship and Yazi configs.
+
+### Security
+
+- Require lock entries, keep available signature/provenance verification enabled,
+  disable automatic installs and Cargo/asdf backends, and remove blanket project
+  trust. Per-project tools now need complete locks too.
+- Add a binary-policy gate, including negative fixtures and native architecture
+  checks. cargo-binstall is not needed for this binary manifest; its default
+  quickinstall/compile fallback is not an approved installation path.
+
+### Removed
+
+- Omit Tokei (current upstream releases have no binaries) and Eza from the
+  portable set (no upstream macOS binary), per owner decision. Use `ls` for
+  the `l` alias and fzf directory preview. No source-build exceptions or downgrades.
+
+### Migration
+
+- After activation, put `$HOME/.nix-profile/bin` first on PATH, run
+  `cd /tmp; mise install --locked && mise reshim`, and open a new shell. There is no network installation during activation.
+- Rustup, language runtime defaults and Nix-specific bootstrap tools stay in Nix.
+  See [the migration guide](docs/rust-cli-migration.md) for security limits and
+  project configuration compatibility.
+
 ## [0.3.0] - 2026-09-09
 
 ### Removed

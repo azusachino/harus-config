@@ -1,15 +1,4 @@
 {config, ...}: {
-  programs.delta = {
-    enable = true;
-    enableGitIntegration = true;
-    options = {
-      navigate = true; # n/N to jump between diff sections
-      side-by-side = true;
-      line-numbers = true;
-      dark = true;
-    };
-  };
-
   programs.git = {
     enable = true;
     signing.format = null;
@@ -20,6 +9,14 @@
       user.name = config.harus.identity.name;
       user.email = config.harus.identity.email;
       core.editor = "nvim";
+      core.pager = "delta"; # mise-owned binary, not a Nix store path
+      interactive.diffFilter = "delta --color-only";
+      delta = {
+        navigate = true;
+        side-by-side = true;
+        line-numbers = true;
+        dark = true;
+      };
       core.autocrlf = "input";
       format.signOff = true;
       pull.rebase = false;
