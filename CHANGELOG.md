@@ -4,6 +4,19 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2026-10-17
+
+### Fixed
+
+- Make the bun supply-chain cooldown apply when `XDG_CONFIG_HOME` is set: bun
+  reads `$XDG_CONFIG_HOME/.bunfig.toml` and ignores `~/.bunfig.toml`, so the
+  cooldown never applied. The same bunfig is now written to both paths.
+
+### Changed
+
+- Supply-chain cooldown is now 3 days (was 7) for npm `min-release-age=3`,
+  bun `minimumReleaseAge = 259200` and uv `exclude-newer = "3 days"`.
+
 ## [0.5.0] - 2026-10-08
 
 ### Changed
