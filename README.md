@@ -43,7 +43,7 @@ Add it as an input and import the module:
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    harus-config.url = "github:azusachino/harus-config/v0.5.0"; # pin a tag
+    harus-config.url = "github:azusachino/harus-config/v0.5.1"; # pin a tag
   };
 
   outputs = {nixpkgs, home-manager, harus-config, ...}: {
@@ -110,7 +110,7 @@ by commit hash in your `flake.lock`, but tags give you a stable, human-readable
 reference:
 
 ```nix
-harus-config.url = "github:azusachino/harus-config/v0.5.0"; # pinned
+harus-config.url = "github:azusachino/harus-config/v0.5.1"; # pinned
 # or track the latest:
 harus-config.url = "github:azusachino/harus-config";        # main
 ```
