@@ -55,8 +55,22 @@
   programs.bat = {
     enable = true;
     config = {
-      theme = "TwoDark";
       style = "changes,header";
+      # bat 0.24+ picks between these from the terminal's light/dark
+      # background, matching ghostty/fish/starship. No plain `theme` key —
+      # it would pin one polarity and override both of these.
+      theme-dark = "Catppuccin Mocha";
+      theme-light = "Catppuccin Latte";
+    };
+    themes = {
+      "Catppuccin Mocha" = {
+        src = ./bat;
+        file = "CatppuccinMocha.tmTheme";
+      };
+      "Catppuccin Latte" = {
+        src = ./bat;
+        file = "CatppuccinLatte.tmTheme";
+      };
     };
   };
   programs.zoxide.enable = true;

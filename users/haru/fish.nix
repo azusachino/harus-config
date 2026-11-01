@@ -32,6 +32,32 @@
         set -p fish_complete_path ~/.nix-profile/share/fish/vendor_completions.d
       end
 
+      # Follow the terminal's light/dark background. fish 4.3+ dynamic themes:
+      # the bundled catppuccin-mocha theme ships latte values in its [light]
+      # section, so fish re-themes itself whenever the terminal background
+      # flips (ghostty/kaku do this live).
+      fish_config theme choose catppuccin-mocha
+
+      # Keep prompt-adjacent tools on the same polarity. fish re-sets the
+      # theme variables on a flip, which re-fires this handler.
+      # fish_color_normal[1] is the theme's normal foreground:
+      # 4c4f69 = latte (light terminal), cdd6f4 = mocha (dark terminal).
+      function __harus_prompt_mode_sync --on-variable fish_color_normal --description "Keep starship/delta on the terminal's light/dark polarity"
+          switch "$fish_color_normal[1]"
+              case 4c4f69
+                  set -gx STARSHIP_CONFIG "$HOME/.config/starship-light.toml"
+                  set -gx GIT_CONFIG_COUNT 1
+                  set -gx GIT_CONFIG_KEY_0 delta.dark
+                  set -gx GIT_CONFIG_VALUE_0 false
+              case cdd6f4
+                  set -gx STARSHIP_CONFIG "$HOME/.config/starship.toml"
+                  set -gx GIT_CONFIG_COUNT 1
+                  set -gx GIT_CONFIG_KEY_0 delta.dark
+                  set -gx GIT_CONFIG_VALUE_0 true
+          end
+      end
+      __harus_prompt_mode_sync
+
       # Extra paths (language runtimes managed outside Nix)
       # -g keeps these session-global; without it fish_add_path writes the
       # *universal* fish_user_paths (~/.config/fish/fish_variables), which drifts
@@ -72,6 +98,16 @@
     };
 
     functions = {
+      # lazygit: stack the light overlay on config.yml when the terminal is
+      # light; dark mode needs no overlay (config.yml is the mocha default).
+      lazygit = ''
+        set -l cfg "$HOME/.config/lazygit/config.yml"
+        if test "$fish_color_normal[1]" = 4c4f69
+            set cfg "$cfg,$HOME/.config/lazygit/config-light.yml"
+        end
+        command lazygit --use-config-file="$cfg" $argv
+      '';
+
       # Load .env file into shell environment
       dotenv = ''
         if test (count $argv) -ne 1
